@@ -1,6 +1,7 @@
 import React from 'react';
 import Login from '../components/login';
 import SignUp from '../components/signup';
+import { CookiesProvider } from "react-cookie";
 
 // the idea, workout app
 // build an app where users can create accounts and log in
@@ -10,9 +11,11 @@ import SignUp from '../components/signup';
 export default function Home() {
 	return (
 		<div>
-			<h1>Hey</h1>
-			<Login />
-			<SignUp />
+			<CookiesProvider>
+				<h1>Hey</h1>
+				<Login />
+				<SignUp />
+			</CookiesProvider>
 		</div>
 	)
 }

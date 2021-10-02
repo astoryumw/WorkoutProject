@@ -30,23 +30,24 @@ app.get("/hello", (req,res) => {
     res.json("Hello world!");
 });
 
-app.post("/login", async (req,res) => {
-    console.log(req.body);
+app.post("/login", cors(), async (req,res) => {
+    // console.log(req.body);
     const username = req.body.username;
     const password = req.body.password;
-    console.log(username + password);
+    
     try {
-        const temp = "SELECT * FROM accountLogin WHERE username=$1";
+        const temp = "SELECT password FROM accountLogin WHERE username=$1";
         const resp = await pool.query(temp, [username]);
-        console.log(resp);
+        // console.log(resp.rowCount);
         if (resp.rowCount === 0) {
-            res.json({ status: "account not found" });
+            res.sendStatus(401);
         } else {
-            console.log(resp.rows[0].password);
+            // console.log(resp.rows[0].password);
+            // console.log(password);
             if (await argon2.verify(resp.rows[0].password, password)) {
-                res.json("Log in succesful!");
+                res.sendStatus(200);
             } else {
-                res.json("Incorrect password");
+                res.sendStatus(401);
             }
         }
     } catch (err) {
@@ -54,13 +55,23 @@ app.post("/login", async (req,res) => {
     }
 });
 
-app.post("/create", async (req, res) => {
+app.get("/user-info", async (req,res) => {
+    const user = req.query.username;
+    try {
+        const temp = await pool.query("SELECT * FROM accountLogin WHERE username=$1",[user]);
+        res.send(temp.rows);
+    } catch (err) {
+        console.log(err);
+    }
+})
+
+app.post("/create", cors(), async (req, res) => {
     let hash;
     const username = req.body.username;
     const password = req.body.password;
     try {
       hash = await argon2.hash(password, "abcdefghijklmnop");
-      console.log("HASH " + hash);
+      // console.log("HASH " + hash);
       const query = "INSERT INTO accountLogin (username, password) VALUES ($1, $2)";
       const result = await pool.query(query, [username, hash]);
       //console.log(result);
@@ -70,7 +81,7 @@ app.post("/create", async (req, res) => {
         res.json("User not created");
       }
     } catch (err) {
-      console.log("ERROR " + err);
+      // console.log("ERROR " + err);
       if (err.message.search("duplicate") != -1) {
         res.json("Username taken");
       }

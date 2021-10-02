@@ -9,8 +9,11 @@ export default function SignUp() {
     const [signUpTry,setSignUpTry] = useState(false);
 
     useEffect(() => {
-        signUpUser(user.username,user.password);
-    },[setSignUpTry]);
+        if (signUpTry) {
+            const signup = signUpUser(user.username,user.password);
+            // console.log(signup);
+        }
+    },[signUpTry]);
 
     function handleUsername(evt) {
         setUser({
@@ -28,8 +31,8 @@ export default function SignUp() {
 
     return (
         <div>
-            <p><input type="text" value={user.username} onChange={handleUsername} /></p>
-            <p><input type="text" value={user.password} onChange={handlePassword} /></p>
+            <p>Username: <input type="text" value={user.username} onChange={handleUsername} /></p>
+            <p>Password: <input type="text" value={user.password} onChange={handlePassword} /></p>
             <button onClick={() => setSignUpTry(true)}>Sign Up</button>
         </div>
     )
