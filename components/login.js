@@ -13,7 +13,10 @@ export default function Login() {
         username: "",
         password: ""
     });
-    let [account,setAccount] = useState([]);
+    let [account,setAccount] = useState({
+        username: "",
+        password: "",
+    });
     const [loggedInTry,setLoggedInTry] = useState(false);
     const [validUser,setValidUser] = useState(false);
     // const history = useHistory();
@@ -25,15 +28,8 @@ export default function Login() {
         if (validUser) {
             // if logged in correctly send it to next page
             // console.log(account.username);
-            // router.push({
-            //     pathname: "/home",
-            //     params: {data: {account}}
-            // });
-            // navigate('/home',
-            // {state: account });
-            // history.push('/home', {prop1: account});
-            // jsCookie.set("user", account);
-            // console.log(jsCookie.get("user"));
+
+            // console.log(typeof(account)); // it's made as an object
             setCookie(user, account, { path: '/' }); // via path accessible everywhere
             Router.replace("/home");
         }
@@ -46,8 +42,12 @@ export default function Login() {
             // console.log(login);
             if (login.status === 200) {
                 const myUser = await getInfo(user.username); // get user info
-                // console.log(myUser[0].username);
-                setAccount(myUser);
+                // console.log("username: " + myUser[0].username); // add both of these objects to the account
+                // console.log("password: " + myUser[0].password);
+                setAccount({
+                    username: myUser[0].username,
+                    password: myUser[0].password
+                });
                 // console.log(account);
                 setValidUser(true);
             } else if (login.status === 401) {
