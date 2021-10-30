@@ -32,7 +32,7 @@ export default function SignUp() {
     return (
         <div>
             <p>Username: <input type="text" value={user.username} onChange={handleUsername} /></p>
-            <p>Password: <input type="text" value={user.password} onChange={handlePassword} /></p>
+            <p>Password: <input type="password" value={user.password} onChange={handlePassword} /></p>
             <button onClick={() => setSignUpTry(true)}>Sign Up</button>
         </div>
     )

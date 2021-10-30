@@ -15,7 +15,7 @@ export default function Login() {
     });
     let [account,setAccount] = useState({
         username: "",
-        password: "",
+        password: ""
     });
     const [loggedInTry,setLoggedInTry] = useState(false);
     const [validUser,setValidUser] = useState(false);
@@ -42,6 +42,7 @@ export default function Login() {
             // console.log(login);
             if (login.status === 200) {
                 const myUser = await getInfo(user.username); // get user info
+                // console.log(myUser);
                 // console.log("username: " + myUser[0].username); // add both of these objects to the account
                 // console.log("password: " + myUser[0].password);
                 setAccount({

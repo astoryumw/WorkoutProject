@@ -1,4 +1,5 @@
 const {MongoClient} = require('mongodb');
+var mongo = require('mongodb');
 
 async function main() {
     const uri = "mongodb+srv://AustinDB:Vcube56!@cluster0.abnfm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";

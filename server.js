@@ -1,6 +1,7 @@
 // node file
 const express = require("express");
 const cors = require("cors");
+const { MongoClient } = require("mongodb");
 // const bodyParser = require("body-parser");
 const app = express();
 
@@ -86,7 +87,49 @@ app.post("/create", cors(), async (req, res) => {
         res.json("Username taken");
       }
     }
-  });
+});
+
+// app.update("/update", cors(), async (req,res) => {
+//   const id = req.body.id;
+
+//   // need to receive id before this
+//   const query = "UPDATE accountLogin SET username=$1 AND password=$2 WHERE id=$1";
+// });
+
+MongoClient.connect("mongodb+srv://AustinDB:Vcube56!@cluster0.abnfm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", {
+    useUnifiedTopology: true })
+.then(client => {
+    // console.log("Connected to database!");
+    const db = client.db('workouts');
+    const collections = db.collection('list');
+
+    app.get('/workouts', (req,res) => {
+        const cursor = collections.find();
+
+        const result = cursor.toArray()
+        .then(results => {
+          // console.log(results);
+          res.json({ workout: results })
+        })
+        .catch(error => console.error(error));
+    })
+
+    // create workout might turn into adding an array of elements so they can add as many as they want
+    app.post('/addWorkout', (req,res) => {
+      const name = req.body.name;
+      console.log(req.body.length);
+      
+
+
+      // const myObject = {name: name, difficulty: difficulty};
+      // console.log(myObject);
+      /*collections.insertOne(myObject, function(err, reeeeeeee) {
+        if (err) throw err;
+        res.json({workout: "Added!"});
+      })*/
+    })
+
+}).catch(console.error);
 
 app.listen(app.get("port"), () => {
     console.log(`Find the server at http://localhost:${app.get("port")}`);
