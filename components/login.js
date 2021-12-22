@@ -39,10 +39,10 @@ export default function Login() {
         try {
             // i need to test if username is there
             const login = await loginUser(user.username,user.password); 
-            // console.log(login);
+            console.log(login);
             if (login.status === 200) {
                 const myUser = await getInfo(user.username); // get user info
-                // console.log(myUser);
+                console.log(myUser);
                 // console.log("username: " + myUser[0].username); // add both of these objects to the account
                 // console.log("password: " + myUser[0].password);
                 setAccount({

@@ -29,12 +29,21 @@ export default function home() {
         const fetchData = async () => {
             const list = await getList();
             setValue(true);
-            // console.log(list); // each element is correct here
+            console.log(list.workout[0].workout[0]); // each element is correct here
             // just made a seperate array because no previousState in functional components
             var justBecause = [];
+            var workoutSet = [];
             for (var i=0; i<list.workout.length; i++) {
-                justBecause = justBecause + list.workout[i].name + " " + list.workout[i].difficulty + "\n";
-                // console.log(list.workout[i].name);
+                for (var u=0; u<list.workout[i].workout[0].length; u++) {
+                    if (u+1===list.workout[i].workout[0].length) {
+                        workoutSet = workoutSet + list.workout[i].workout[0][u];
+                    } else {
+                        workoutSet = workoutSet + list.workout[i].workout[0][u] + ", ";
+                    }
+                    
+                }
+                justBecause = justBecause + "[" + workoutSet + "]" + "\n";
+                workoutSet = [];
             }
             setInfo({
                 workout: justBecause.split('\n').map(str=><p>{str}</p>)
@@ -44,10 +53,6 @@ export default function home() {
         fetchData();
     }, [value]);
 
-    
-    // todo
-    // build a new table in database, maybe mongoDB?
-    // allow users to add their own workouts
     return (
         <Layout>
             <div>

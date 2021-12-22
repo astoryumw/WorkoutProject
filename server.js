@@ -2,7 +2,15 @@
 const express = require("express");
 const cors = require("cors");
 const { MongoClient } = require("mongodb");
-// const bodyParser = require("body-parser");
+const path = require('path');
+const crypto = require('crypto');
+const mongoose = require('mongoose');
+const multer = require('multer');
+const {GridFsStorage} = require('multer-gridfs-storage');
+const Grid = require('gridfs-stream');
+const methodOverride = require('method-override');
+const bodyParser = require('body-parser');
+
 const app = express();
 
 app.set("port", 3001);
@@ -17,10 +25,14 @@ app.use(function(req, res, next) {
   next();
 });
 
+app.use(bodyParser.json());
+app.use(methodOverride('_method'));
+app.set('view engine', 'ejs');
+
 const Pool = require("pg").Pool;
 const config = {
     host: "localhost",
-    user: "Austin",
+    user: "postgres",
     password: "astros5",
     database: "workout"
 };
@@ -39,7 +51,7 @@ app.post("/login", cors(), async (req,res) => {
     try {
         const temp = "SELECT password FROM accountLogin WHERE username=$1";
         const resp = await pool.query(temp, [username]);
-        // console.log(resp.rowCount);
+        // console.log(resp);
         if (resp.rowCount === 0) {
             res.sendStatus(401);
         } else {
@@ -96,19 +108,142 @@ app.post("/create", cors(), async (req, res) => {
 //   const query = "UPDATE accountLogin SET username=$1 AND password=$2 WHERE id=$1";
 // });
 
-MongoClient.connect("mongodb+srv://AustinDB:Vcube56!@cluster0.abnfm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", {
+const mongoURI = 'mongodb+srv://AustinDB:Vcube56!@cluster0.abnfm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+
+// const conn = mongoose.createConnection(mongoURI);
+
+// Init gfs
+// let gfs;
+
+// conn.once('open', () => {
+//   // Init stream
+//   gfs = Grid(conn.db, mongoose.mongo);
+//   gfs.collection('uploads');
+// });
+
+// const storage = new GridFsStorage({
+//   url: mongoURI,
+//   file: (req, file) => {
+//     return new Promise((resolve, reject) => {
+//       crypto.randomBytes(16, (err, buf) => {
+//         if (err) {
+//           return reject(err);
+//         }
+//         const filename = buf.toString('hex') + path.extname(file.originalname);
+//         const fileInfo = {
+//           filename: filename,
+//           bucketName: 'uploads'
+//         };
+//         resolve(fileInfo);
+//       });
+//     });
+//   }
+// });
+// const upload = multer({ storage });
+
+// use insertOne?
+// app.post('/upload', upload.single('image'), (req, res) => {
+//   console.log("I'm in /upload");
+//   res.json({ image: req.image });
+//   gfs.collection.files.createIndex({ filename: req.image });
+//   // console.log(req);
+//   // res.redirect('/');
+// });
+
+MongoClient.connect(mongoURI, {
     useUnifiedTopology: true })
 .then(client => {
-    // console.log("Connected to database!");
+    console.log("Connected to database!");
     const db = client.db('workouts');
     const collections = db.collection('list');
+    const collectionsImage = db.collection('images');
+    const conn = mongoose.createConnection(mongoURI);
+
+    let gfs;
+
+    conn.once('open', () => {
+      // Init stream
+      gfs = Grid(conn.db, mongoose.mongo);
+      gfs.collection('uploads');
+    });
+
+    const storage = new GridFsStorage({
+      url: mongoURI,
+      file: (req, file) => {
+        return new Promise((resolve, reject) => {
+          crypto.randomBytes(16, (err, buf) => {
+            if (err) {
+              return reject(err);
+            }
+            const filename = buf.toString('hex') + path.extname(file.originalname);
+            const fileInfo = {
+              filename: filename,
+              bucketName: 'uploads'
+            };
+            resolve(fileInfo);
+          });
+        });
+      }
+    });
+    const upload = multer({ storage });
+
+    app.post('/upload', upload.single('image'), (req, res) => {
+      console.log("I'm in /upload");
+      res.json({ image: req.image });
+      // collectionsImage.createIndex({ filename: req.image });
+      // gfs.collection.files.createIndex({ filename: req.image });
+      // console.log(req);
+      // res.redirect('/');
+    });
+
+    app.get('/photo/:filename', (req,res) => {
+      gfs.files.findOne({ filename: req.params.filename }, (err,image) => {
+        return res.json(image);
+        // if (!image || image.length===0) {
+        //   console.log("Nothing in the database");
+        // } else {
+        //   console.log("There is something in the database");
+        //   // res.json(image);
+
+        //   if (image.contentType === 'image/jpeg' || image.contentType === 'image/png') {
+        //     console.log("Something did work");
+        //     const readstream = gfs.createReadStream({filename: image.filename});
+        //     // readstream.pipe(res);
+        //   } else {
+        //     console.log("Something didn't work");
+        //   }
+        // }
+      })
+    })
+
+    app.get('/', (req,res) => {
+      gfs.files.find().toArray((err, image) => {
+        if (!image || image.length===0) {
+          res.render('index', { image: false });
+        } else {
+          // image.map(file => {
+          //   if (
+          //     file.contentType === 'image/jpeg' ||
+          //     file.contentType === 'image/png'
+          //   ) {
+          //     file.isImage = true;
+          //   } else {
+          //     file.isImage = false;
+          //   }
+          // });
+          res.render('index', { image: image });
+        }
+      })
+    })
 
     app.get('/workouts', (req,res) => {
         const cursor = collections.find();
-
+        
         const result = cursor.toArray()
         .then(results => {
-          // console.log(results);
+          //console.log(results);
+          //console.log(typeof(results));
+          // console.log(Object.values(results));
           res.json({ workout: results })
         })
         .catch(error => console.error(error));
@@ -116,18 +251,22 @@ MongoClient.connect("mongodb+srv://AustinDB:Vcube56!@cluster0.abnfm.mongodb.net/
 
     // create workout might turn into adding an array of elements so they can add as many as they want
     app.post('/addWorkout', (req,res) => {
-      const name = req.body.name;
-      console.log(req.body.length);
+      // console.log("this is my body");
+      // console.log(req.body);
+      var myObjects = req.body;
+      // console.log(typeof(myObjects));
+      var myArray = Object.values(myObjects);
+      // console.log(myArray[0][0]);
       
-
-
-      // const myObject = {name: name, difficulty: difficulty};
+      const newObject = {workout: myArray};
       // console.log(myObject);
-      /*collections.insertOne(myObject, function(err, reeeeeeee) {
+      collections.insertOne(newObject, function(err, reeeeeeee) {
         if (err) throw err;
         res.json({workout: "Added!"});
-      })*/
+      })
     })
+
+
 
 }).catch(console.error);
 

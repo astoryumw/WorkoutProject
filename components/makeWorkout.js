@@ -7,15 +7,15 @@ export default function MakeWorkout() {
     const [input,setInput] = useState({ // is object
         "one": {
             name: "",
-            difficulty: 0
+            reps: 0
         },
         "two": {
             name: "",
-            difficulty: 0
+            reps: 0
         },
         "three": {
             name: "",
-            difficulty: 0
+            reps: 0
         }
     });
     const [clicked,setClicked] = useState(false);
@@ -33,14 +33,14 @@ export default function MakeWorkout() {
                 var anotherObj = [];
                 for (var i=0; i<3; i++) { // do this with each object and add to array
                     if (input.one.name!=='' && i===0) {
-                        obj.push(input.one.name + " " + input.one.difficulty);
+                        obj.push(input.one.name + " " + input.one.reps);
                     }
                     if (input.two.name!=='' && i===1) {
-                        anotherObj = input.two.name + " " + input.two.difficulty;
+                        anotherObj = input.two.name + " " + input.two.reps;
                         obj.push(anotherObj);
                     }
                     if (input.three.name!=='' && i===2) {
-                        anotherObj = input.three.name + " " + input.three.difficulty;
+                        anotherObj = input.three.name + " " + input.three.reps;
                         obj.push(anotherObj);
                     }
                 }
@@ -61,15 +61,15 @@ export default function MakeWorkout() {
         setInput({
             one: {
                 name: evt.target.value,
-                difficulty: input.one.difficulty
+                reps: input.one.reps
             },
             two: {
                 name: input.two.name,
-                difficulty: input.two.difficulty
+                reps: input.two.reps
             },
             three: {
                 name: input.three.name,
-                difficulty: input.three.difficulty
+                reps: input.three.reps
             }
         })
     }
@@ -78,15 +78,15 @@ export default function MakeWorkout() {
         setInput({
             one: {
                 name: input.one.name,
-                difficulty: input.one.difficulty
+                reps: input.one.reps
             },
             two: {
                 name: evt.target.value,
-                difficulty: input.two.difficulty
+                reps: input.two.reps
             },
             three: {
                 name: input.three.name,
-                difficulty: input.three.difficulty
+                reps: input.three.reps
             } 
         })
     }
@@ -95,95 +95,95 @@ export default function MakeWorkout() {
         setInput({
             one: {
                 name: input.one.name,
-                difficulty: input.one.difficulty
+                reps: input.one.reps
             },
             two: {
                 name: input.two.name,
-                difficulty: input.two.difficulty
+                reps: input.two.reps
             },
             three: {
                 name: evt.target.value,
-                difficulty: input.three.difficulty
+                reps: input.three.reps
             }
         })
     }
 
-    function handleDifficulty(evt) {
+    function handleReps(evt) {
         setInput({
             one: {
                 name: input.one.name,
-                difficulty: evt.target.value
+                reps: evt.target.value
             },
             two: {
                 name: input.two.name,
-                difficulty: evt.target.value
+                reps: evt.target.value
             },
             three: {
                 name: input.three.name,
-                difficulty: input.three.difficulty
+                reps: input.three.reps
             }
         })
     }
 
-    function handleDifficulty1(evt) {
+    function handleReps1(evt) {
         setInput({
             one: {
                 name: input.one.name,
-                difficulty: input.one.difficulty
+                reps: input.one.reps
             },
             two: {
                 name: input.two.name,
-                difficulty: evt.target.value
+                reps: evt.target.value
             },
             three: {
                 name: input.three.name,
-                difficulty: input.three.difficulty
+                reps: input.three.reps
             }
         })
     }
 
-    function handleDifficulty2(evt) {
+    function handleReps2(evt) {
         setInput({
             one: {
                 name: input.one.name,
-                difficulty: input.one.difficulty
+                reps: input.one.reps
             },
             two: {
                 name: input.two.name,
-                difficulty: input.two.difficulty
+                reps: input.two.reps
             },
             three: {
                 name: input.three.name,
-                difficulty: evt.target.value
+                reps: evt.target.value
             }
         })
     }
 
     // this will ultimately have:
-    // estimated time to complete, difficulty, option for as many exercises as selected
+    // estimated time to complete, reps, option for as many exercises as selected
     return (
         <Layout>
             <div>
                 {count===1 ? (
                     <div>
                         <p>Workout: <input type="text" value={input.one.name} onChange={handleWorkout} /></p>
-                        <p>Difficulty: <input type="text" value={input.one.difficulty} onChange={handleDifficulty} /></p>
+                        <p>Reps*Amount: <input type="text" value={input.one.reps} onChange={handleReps} /></p>
                     </div>
                 ) : count===2 ? (
                     <div>
                         <p>Workout: <input type="text" value={input.one.name} onChange={handleWorkout} /></p>
-                        <p>Difficulty: <input type="text" value={input.one.difficulty} onChange={handleDifficulty} /></p>
+                        <p>Reps*Amount: <input type="text" value={input.one.reps} onChange={handleReps} /></p>
                         <p>Workout: <input type="text" value={input.two.name} onChange={handleWorkout1} /></p>
-                        <p>Difficulty: <input type="text" value={input.two.difficulty} onChange={handleDifficulty1} /></p>
+                        <p>Reps*Amount: <input type="text" value={input.two.reps} onChange={handleReps1} /></p>
                     </div>
                 ) : count===3 ? (
                     <div>
                         <p>Workout: <input type="text" value={input.one.name} onChange={handleWorkout} /></p>
-                        <p>Difficulty: <input type="text" value={input.one.difficulty} onChange={handleDifficulty} /></p>
+                        <p>Reps*Amount: <input type="text" value={input.one.reps} onChange={handleReps} /></p>
                         <p>Workout: <input type="text" value={input.two.name} onChange={handleWorkout1} /></p>
-                        <p>Difficulty: <input type="text" value={input.two.difficulty} onChange={handleDifficulty1} /></p>
+                        <p>Reps*Amount: <input type="text" value={input.two.reps} onChange={handleReps1} /></p>
                         <p>Workout: <input type="text" value={input.three.name} onChange={handleWorkout2} /></p>
-                        <p>Difficulty: <input type="text" value={input.three.difficulty} onChange={handleDifficulty2} /></p>
+                        <p>Reps*Amount: <input type="text" value={input.three.reps} onChange={handleReps2} /></p>
                     </div>
                 ) : (
                     <p></p>
