@@ -108,7 +108,7 @@ app.post("/create", cors(), async (req, res) => {
 //   const query = "UPDATE accountLogin SET username=$1 AND password=$2 WHERE id=$1";
 // });
 
-const mongoURI = 'mongodb+srv://AustinDB:Vcube56!@cluster0.abnfm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+const mongoURI = 'mongodb+srv://secret@cluster0.abnfm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 
 // const conn = mongoose.createConnection(mongoURI);
 
