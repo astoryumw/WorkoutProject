@@ -7,16 +7,16 @@ const linkStyle = {
 
 export default function Header() {
     return (
-        <div>
+        <div align="center">
             <Link href="/home">
                 <a style={linkStyle}>Home</a>
             </Link>
             <Link href="/account">
                 <a style={linkStyle}>Settings</a>
             </Link>
-            <Link href="/profile">
+            {/* <Link href="/profile">
                 <a style={linkStyle}>Profile</a>
-            </Link>
+            </Link> */}
             <Link href="/">
                 <Logout />
             </Link>

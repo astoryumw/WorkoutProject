@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { signUpUser } from "../lib/utils";
+import Button from 'react-bootstrap/Button';
 
 export default function SignUp() {
     let [user,setUser] = useState({
@@ -33,7 +34,7 @@ export default function SignUp() {
         <div>
             <p>Username: <input type="text" value={user.username} onChange={handleUsername} /></p>
             <p>Password: <input type="password" value={user.password} onChange={handlePassword} /></p>
-            <button onClick={() => setSignUpTry(true)}>Sign Up</button>
+            <Button variant="secondary" onClick={() => setSignUpTry(true)}>Sign Up</Button>
         </div>
     )
 }

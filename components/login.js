@@ -7,6 +7,7 @@ import { loadGetInitialProps } from 'next/dist/shared/lib/utils';
 import { useNavigate } from 'react-router-dom';
 import jsCookie from 'js-cookie';
 import { useCookies } from "react-cookie";
+import Button from 'react-bootstrap/Button';
 
 export default function Login() {
     let [user,setUser] = useState({
@@ -81,7 +82,7 @@ export default function Login() {
         <div>
             <p>Username: <input type="text" value={user.username} onChange={handleUsername} /></p>
             <p>Password: <input type="password" value={user.password} onChange={handlePassword} /></p>
-            <button onClick={handleLogin}>Log In</button>
+            <Button variant="secondary" onClick={handleLogin}>Log In</Button>
         </div>
     )
 }

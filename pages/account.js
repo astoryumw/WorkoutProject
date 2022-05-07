@@ -50,12 +50,14 @@ export default function Account(){
 
     return (
         <Layout>
+            <div align="center">
             <h3>Enter information you wish to change below.</h3>
             <p>Username: <input type="text" value={account.username} onChange={handleUsername} /></p>
             <p>Password: <input type="password" value={account.password} onChange={handlePassword} /></p>
-            <p>Select new profile picture: <input type="file" value={profilePhoto} onChange={handleImage} /></p>
-            <button onClick={() => setClicked(true)}>Upload</button>
+            {/* <p>Select new profile picture: <input type="file" value={profilePhoto} onChange={handleImage} /></p> */}
+            {/* <button onClick={() => setClicked(true)}>Upload</button> */}
             <button>Update</button>
+            </div>
         </Layout>
     )
 }

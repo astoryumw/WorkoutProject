@@ -56,14 +56,15 @@ export default function home() {
     return (
         <Layout>
             <div>
-                <h1>Welcome to the fake homepage!</h1>
-                {myThing ? (
+                
+                {/* {myThing ? (
                     <h1>{myThing.username}</h1>
                 ) : (
                     <h1>New phone who dis</h1>
-                )}
+                )} */}
+                <h1 align="center" >Workouts</h1>
                 {info ? (
-                    <div>
+                    <div align="center" class="p-2 bg-light border">
                         <p>{info.workout}</p>
                     </div>
                 ) : (

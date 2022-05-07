@@ -163,7 +163,7 @@ export default function MakeWorkout() {
     // estimated time to complete, reps, option for as many exercises as selected
     return (
         <Layout>
-            <div>
+            <div align="center">
                 {count===1 ? (
                     <div>
                         <p>Workout: <input type="text" value={input.one.name} onChange={handleWorkout} /></p>

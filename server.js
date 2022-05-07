@@ -186,19 +186,22 @@ MongoClient.connect(mongoURI, {
       }
     });
     const upload = multer({ storage });
+    // const newDb = client.db("myFirstDatabase");
+    // const newBucket = new mongodb.GridFSBucket(newDb);
+    
 
     app.post('/upload', upload.single('image'), (req, res) => {
       console.log("I'm in /upload");
-      res.json({ image: req.image });
+      res.json({ image: req });
       // collectionsImage.createIndex({ filename: req.image });
       // gfs.collection.files.createIndex({ filename: req.image });
-      // console.log(req);
-      // res.redirect('/');
+      // console.log(req.image);
+      res.redirect('/');
     });
 
     app.get('/photo/:filename', (req,res) => {
       gfs.files.findOne({ filename: req.params.filename }, (err,image) => {
-        return res.json(image);
+        res.json(image);
         // if (!image || image.length===0) {
         //   console.log("Nothing in the database");
         // } else {
